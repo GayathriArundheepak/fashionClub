@@ -1,0 +1,112 @@
+
+<%- include('../layout/header.ejs') %>
+<title>home</title>
+
+</head>
+
+<body>
+    
+ 
+ <!-- Topbar Start -->
+ <%- include('./userpartials/Topbar.ejs') %>
+<!-- Topbar End -->
+
+  
+      <!-- Navbar Start -->
+      <%- include('./userpartials/Navbar.ejs') %>
+    <!-- Navbar End -->
+
+
+    <!-- Cart Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-bordered text-center mb-0">
+                <% if (!cartData || cartData.length === 0) { %>
+                <p>Your shopping cart is empty.</p>
+                <% } else { %>
+                <thead class="bg-secondary text-dark">
+                    <tr>
+                        <th>Products</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    <% cartData.items.forEach(cartItem => { %>
+                    <tr>
+                        <td class="align-middle"><%= cartItem.productId.title %></td>
+                        <td class="align-middle">$<%= cartItem.productId.price %></td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <form action="/cart/decrement-quantity/<%= cartItem._id %>" method="POST">
+                                        <button class="btn btn-sm btn-primary btn-minus">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <p type="text" class="form-control form-control-sm bg-secondary text-center"
+                                    value="<%= cartItem.quantity %>" style="height: 31px;">
+                                    <%= cartItem.quantity %>
+                                </p>
+                                <div class="input-group-btn">
+                                    <form action="/cart/increment-quantity/<%= cartItem._id %>" method="POST">
+                                        <button class="btn btn-sm btn-primary btn-plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$<%= cartItem.quantity * cartItem.productId.price %></td>
+                        <td class="align-middle">
+                            <form action="/cart/remove-from-cart/<%= cartItem._id %>" method="POST">
+                                <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-times"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+                <% } %>
+            </table>
+        </div>
+        <div class="col-lg-4">
+           
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3 pt-1">
+                        <h6 class="font-weight-medium">Subtotal</h6>
+                        <h6 class="font-weight-medium">$<%= totalPrice %></h6>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Shipping</h6>
+                        <h6 class="font-weight-medium">Free</h6>
+                    </div>
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold" id="grandTotal">$<%= totalPrice %></h5>
+                    </div>
+                    <a href="/cart/checkout" style="text-decoration: none;"><button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->
+
+    <%- include('./userpartials/Footer.ejs') %>
+    <!-- Footer End -->
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

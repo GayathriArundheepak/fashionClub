@@ -1,0 +1,77 @@
+<!-- admin login.ejs -->
+
+<% include('../layout/header.ejs') %>
+
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+</head>
+<body>
+
+
+ 
+  <div class="container">
+    <!-- <input type="checkbox" id="check"> -->
+    <div class="login form">
+      <img src="/images/logoFashionClub.png" alt="logo of FashionClub">
+      <header>Login</header>
+      <form action="/admin/home"  id="signup-form" method="POST">
+        <label class="error" for="username"></label>
+        <input name="username" type="text" placeholder="  Name" required>
+        <!-- <label class="error" for="email"></label>
+        <input type="email" name="email" placeholder="Enter your email"> -->
+        <label class="error" for="password"></label>
+        <input  name="password" id="password" type="password" placeholder="  password"  >
+        <a href="/reset-password">Forgot password?</a>
+        <input type="submit" class="button"   value="Login">
+            <p>   <%=message%></p>
+      </form>
+     
+    </div>
+   
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+<script>
+  $(document).ready(function(){
+  $("#signup-form").validate({
+    rules:{
+        username:{
+            required:true,
+            minlength:4,
+            maxlength:12
+        },
+        email:{
+            required:true,
+            email:true
+        },
+        password:{
+            required:true,
+            minlength:6,
+            
+            
+        },
+       
+    },
+        messages:{
+        username:{
+        required:"Enter your Name"
+        
+    }, 
+      email:{
+       required:"mail id is required",
+       email:"please enter valid mail id"
+      },
+    password:{
+        required: "please enter password",
+
+
+
+    }
+  
+}
+})
+})
+</script>
+
+<% include('../layout/footer.ejs') %>
+

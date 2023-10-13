@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+    <style>
+        /* Reset some default styles for better consistency */
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Apply basic styles to the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background-color:#009688 ;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .order-details {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 15px 0;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container col-md-12">
+        <img src="/images/logoFashionClub.png" alt="logoFashionClub.png" style="max-width: 100%; height: auto;"><br>
+        <img src="/images/payment-success.png" alt="payment-success.png"" style="max-width: 100%; height: auto;">
+        <header>
+          
+            <h1>Payment and Order are successfully placed</h1>
+        </header>
+        <main>
+            <div class="order-details">
+                <p>Payment Type: <%= paymentType %></p>
+
+                <% if (paymentType === 'wallet') { %>
+                    <p>Wallet Balance: $<%= wallet.balance %></p>
+                <% } %>
+                <% if (paymentType === 'UPI') { %>
+                    <p>Amount: <%= amount %></p>
+                    <!-- <p> Order:<%=order %></p> -->
+                <% } %>
+                <a href="/">Back to home page</a><br>
+                <a href="/orders">Go to the Orders page</a>
+                <p>Thank you for your order!</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

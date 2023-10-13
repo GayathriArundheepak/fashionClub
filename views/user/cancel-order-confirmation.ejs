@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <!-- Font Awesome -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+     <!-- Customized Bootstrap Stylesheet -->
+     <link href="/css/style.css" rel="stylesheet">
+    <!-- Include necessary meta tags and CSS -->
+</head>
+<body>
+    <div class="container mt-5" style="text-align: center;">
+        <h1 class="display-4">Cancel </h1>
+      
+    
+        <!-- Display order details here -->
+    
+        <!-- Display products and provide options for item-level cancellation -->
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <% order.products.forEach((product) => { %>
+                            <td>
+                                <!-- <img src="/admin/api/product/<%= product._id %>/0" alt="<%= product.productName %>" /> -->
+                                <h6><strong>Product Name:</strong> <%= product.productName %></h6>
+                                <p><strong>Quantity:</strong> <%= product.quantity %></p>
+                                <p><strong>Price:</strong> <%= product.price %></p>
+                                <form action="/cancel-item" method="POST">
+                                    <input type="hidden" name="orderId" value="<%= order._id %>">
+                                    <input type="hidden" name="productId" value="<%= product._id %>">
+                                    <input type="hidden" name="productName" value="<%= product.productName %>">
+                                    <input type="hidden" name="cancelledProductQuantity" value="<%= product.quantity %>">
+                                    <input type="hidden" name="cancelledProductPrice" value="<%= product.price %>">
+                                    <button type="submit" class="btn ">Cancel Item</button>
+                                </form>
+                            </td>
+                        <% }) %>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Add a button to confirm the entire order cancellation -->
+        <!-- <form action="/cancel-order" method="POST">
+            <input type="hidden" name="orderId" value="<%= order._id %>">
+            <button type="submit">Confirm Full Order Cancellation</button>
+        </form> -->
+        <a href="/orders" class="btn ">Go Back</a>
+    </div>
+    
+  
+    
+</body>
+</html>

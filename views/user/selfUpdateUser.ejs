@@ -1,0 +1,100 @@
+<%- include('../layout/header.ejs') %>
+<title>home</title>
+
+</head>
+
+<body>
+    
+ 
+ <!-- Topbar Start -->
+ <%- include('./userpartials/Topbar.ejs') %>
+<!-- Topbar End -->
+
+  
+  
+
+ 
+  <div class="container" style="margin: 100px;">
+
+    <div class="registration form">
+      <header>change your Account details</header>
+      <form action="/selfUpdateUser"  id="signup-form" method="POST">
+      
+        <ul>
+          <label class="error" for="username"></label>
+        <input name="username" type="text" value="<%= user.username %>" placeholder="Name">
+        <label class="error" for="email"></label>
+        <input type="email" name="email" value="<%= user.email %>" placeholder="mail ID">
+        <label class="error" for="phoneNumber"></label>
+        <input type="text" name="phoneNumber" value="<%= user.phoneNumber %>"placeholder="phone Number" required>
+       
+         <input  type="submit" class="button" value="submit"> 
+    
+      </ul>
+      </form>
+   
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+<script>
+  $(document).ready(function(){
+  $("#signup-form").validate({
+    rules:{
+        username:{
+            required:true,
+            minlength:4,
+            maxlength:12
+        },
+        email:{
+            required:true,
+            email:true
+        },
+        phoneNumber:{
+            required:true,
+            minlength:10,
+            maxlength:15
+         
+        },
+        password:{
+            required:true,
+            minlength:6,
+            
+            
+        },
+        confirmPassword:{
+            required:true,
+            equalTo: "#password"
+
+
+        }
+        
+    },
+        messages:{
+        username:{
+        required:"Enter your Name"
+        
+    },
+      email:{
+       required:"mail id is required",
+       email:"please enter valid mail id"
+      },
+      phoneNumber:{
+       required:"mobile Number is required"
+   
+      },
+    password:{
+        required: "please enter password",
+
+
+
+    },
+    confirmPassword:{
+        required:"confirm your password",
+        equalTo:"password entered incorrect,please check"
+    }
+}
+})
+})
+</script>
+<% include('../layout/footer.ejs') %>

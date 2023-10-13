@@ -1,0 +1,291 @@
+<%- include('../layout/header.ejs') %>
+<title>home</title>
+
+</head>
+
+<body>
+    
+ 
+
+  
+  
+      <!-- Page Header Start -->
+      <div class="container-fluid bg-secondary mb-5">
+          <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+              <h1 class="font-weight-semi-bold text-uppercase mb-3">COUPONS</h1>
+              <div class="d-inline-flex">
+               <!-- Coupons Start -->
+<!-- <div class="container">
+    <div class="row">
+        <% coupons.forEach((coupon) => { %>
+        <div class="col-md-6 mb-4">
+            <div class="couponCard">
+                <div class="card-body">
+                    <p class="card-text">Discount Percentage: <%= coupon.discountPercentage %>%</p>
+                    <p class="card-text">Minimum Order Amount: <%= coupon.minOrderAmount %></p>
+                    <h5 class="card-title">CODE:<%= coupon.code %></h5>
+                     Add more coupon details as needed 
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div> -->
+<!-- Coupons End -->
+               
+              </div>
+          </div>
+      </div>
+      <!-- Page Header End -->
+      
+      
+      
+      <!-- Checkout Start -->
+      <!-- <div class="collapse mb-4" id="shipping-address"> -->
+      <div class="container-fluid pt-5">
+          <div class="row px-xl-5 ">
+              <div class="col-lg-8 ">
+                  <div class="mb-4">
+                    <div class="mb-5 col-lg-9"  >
+                        <% addresses.forEach((address) => { %>
+                        <% address.userAddress.forEach((object) => { %>
+                            <div class="list-group-item ">
+                                <h5 class="font-weight-semi-bold mb-3">Address</h5>
+                                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i><strong>House No/Name:</strong> <%= object.houseNO %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>City/Village:</strong> <%= object.cityOrVillage %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>Street:</strong> <%= object.street %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>District:</strong> <%= object.district %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>State:</strong> <%= object.state %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>Country:</strong> <%= object.country %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>Pin:</strong> <%= object.pin %></p>
+                              
+                                <a href="/profile/addresses/selectedAddress/<%= object._id %>" class="btn ml-2"><strong>Choose this address</strong>  </a> 
+                            </div>
+                            
+                       <% }) %>
+                            <br>
+                           
+                                  
+                            <% }) %>
+                        </div>
+                            </div>
+                        </div>
+       
+              
+                <div class="col-lg-4">
+                    <div class="card border-secondary mb-5">
+                      <div class="card-header bg-secondary border-0">
+                          <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                      </div>
+                      <div class="card-body">
+                        
+                          <h5 class="font-weight-medium mb-3">Products</h5>
+                          <% userCart.items.forEach(item => { %>
+                            <div class="d-flex justify-content-between">
+                                <p name="productName" ><%= item.productId.title %> <span>(<%= item.quantity %>)</span></p>
+                              <p>$<%= item.productId.price %></p>
+                          </div>
+                          <% }); %>
+                          <hr class="mt-0">
+                          <div class="d-flex justify-content-between mb-3 pt-1">
+                              <h6 class="font-weight-medium">Subtotal</h6>
+                              <h6 class="font-weight-medium"><%=totalPrice %> </h6>
+                          </div>
+                  
+                          <%  if (totalPrice >= maxAmount){ %> 
+                        
+                          
+                            <%  if (discountAmount === null){ %> 
+                                <div class="d-flex justify-content-between mb-3 pt-1">
+                                    <h6 class="font-weight-medium"> Apply Coupon </h6>
+                                    <form action="/payment/remove-coupon/<%=totalPrice %> " method="post">
+                                        <input name="couponCode" type="text" placeholder="enter the coupon code">
+                                        <button  type="submit"   style="text-decoration: none;background-color: #009688a8;">COUPON</button>
+                                      </form>
+                                      
+                                  </div>
+                                <%  }else{ %> 
+                                    <div class="d-flex justify-content-between mb-3 pt-1">
+                                        <h6 class="font-weight-medium"> Remove Coupon </h6>
+                                        <form action="/payment/apply-coupon/<%=totalPrice %> " method="post">
+                                            <input name="couponCode" type="text" placeholder="enter the coupon code">
+                                            <button  type="submit"   style="text-decoration: none;background-color: #009688a8;">COUPON</button>
+                                          </form>
+                                          
+                                      </div>
+
+                              <%  } %> 
+                              <%  } %> 
+                          <div class="d-flex justify-content-between">
+                              <h6 class="font-weight-medium">Shipping</h6>
+                              <h6 class="font-weight-medium">Free</h6>
+                          </div>
+                          <!-- <div class="card-footer border-secondary bg-transparent">
+                              <div class="d-flex justify-content-between mt-2">
+                                  <h5 class="font-weight-bold">Total</h5>
+                                </div>
+                              <h5 class="font-weight-bold" id="totalPrice" name="totalPrice"   data-total-price="<%= totalPrice %>">$<%= totalPrice %></h5>
+                            </div> -->
+                            <% if (discountAmount > 0) { %>
+                                <div class="d-flex justify-content-between mb-3 pt-1">
+                                  <h6 class="font-weight-medium">Discount</h6>
+                                  <h6 class="font-weight-medium">-$<%= discountAmount %></h6>
+                                </div>
+                              <% } %>
+                              
+                              
+                              <!-- Update the total price to reflect the discount -->
+                              <div class="card-footer border-secondary bg-transparent">
+                                <div class="d-flex justify-content-between mt-2">
+                                  <h5 class="font-weight-bold">Total</h5>
+                                  <h5 class="font-weight-bold" id="totalPrice" name="totalPrice"   data-total-price="<%= (totalPrice - discountAmount) %>">$<%= (totalPrice - discountAmount) %></h5>
+                                </div>
+                              </div>
+                              
+                        </div>
+                    </div>
+                    <!-- ... (Previous HTML code) -->
+
+<!-- If a coupon is applied and there's a discount amount, display it -->
+  <!-- ... (Rest of your HTML code) -->
+  
+                    
+                    <form id="checkout-form" action="/cart/checkoutSubmission/<%=totalPrice %>" method="POST">
+                    <div class="card border-secondary mb-5">
+                        <div class="card-header bg-secondary border-0">
+                            <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                        </div>
+                        <div class="card-body">
+                          <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" name="paymentType" id="upi" value="UPI">
+                                  <label class="custom-control-label"  for="upi">UPI</label>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" name="paymentType" id="cod" value="COD">
+                                  <label class="custom-control-label" for="cod">COD(cash on delivery)</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" name="paymentType" id="banktransfer" value="Bank Transfer">
+                                  <label class="custom-control-label" for="banktransfer">Bank Transfer(credit/debit card)</label>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-footer border-secondary bg-transparent">
+                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" id="place-order-button" type="submit">Place Order</button>
+
+                          <!-- <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" id="place-order-button" type="button">Place Order</button> -->
+                      </div>
+                  </div>
+                </form>
+              </div>
+          </div>
+      </div>
+      </div>
+      <!-- Checkout End -->
+  
+  
+   
+  
+      <!-- Back to Top -->
+      <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+ 
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          // Function to handle online payment
+          function online() {
+              const totalPrice = document.getElementById('totalPrice').getAttribute('data-total-price');
+      
+              var options = {
+                  "key": "rzp_test_ovjMyiU6cN7ilN",
+                  "amount": totalPrice * 100,
+                  "currency": "INR",
+                  "name": "Fashion Club",
+                  "theme": {
+                      "color": "#009688"
+                  },
+                  "order_id": undefined,
+                  "handler": function (response) {
+                      document.getElementById('checkout-form').submit();
+                  },
+              };
+              var rzp1 = new Razorpay(options);
+              rzp1.open();
+          }
+      
+          // Function to show SweetAlert notification
+          function showSweetAlert(selectedPaymentType) {
+              // Get the selected payment type
+      
+              // Check if the payment type is "COD" or "wallet"
+              if (selectedPaymentType === "COD" || selectedPaymentType === "wallet") {
+                  // Show a SweetAlert based on the payment type
+                  Swal.fire({
+                      icon: 'info',
+                      title: `Payment Type: ${selectedPaymentType}`,
+                      text: 'You have selected this payment method.',
+                      confirmButtonText: 'OK'
+                  }).then((result) => {
+                      // Check if the user clicked "OK"
+                      if (result.isConfirmed) {
+                          // Submit the form
+                          document.getElementById('checkout-form').submit();
+                      }
+                  });
+              }
+          }
+      
+          // Add an event listener to the "Place Order" button
+          document.getElementById('place-order-button').addEventListener('click', function (event) {
+              // Prevent the default form submission
+              event.preventDefault();
+      
+              const selectedPaymentType = getSelectedPaymentType();
+      
+              if (selectedPaymentType === "UPI") {
+                  // Call the online function when UPI is selected
+                  online();
+              } else {
+                 
+           // Show a SweetAlert based on the payment type
+          //  Swal.fire({
+          //             icon: 'info',
+          //             title: `Payment Type: ${selectedPaymentType}`,
+          //             text: 'You have selected this payment method.',
+          //             confirmButtonText: 'OK'
+          //         }).then((result) => {
+          //             // Check if the user clicked "OK"
+          //             if (result.isConfirmed) {
+          //                 // Submit the form
+          //                 document.getElementById('checkout-form').submit();
+          //             }
+          //         });
+          alert(`You are selected ${selectedPaymentType},Let proceed`);
+              
+              // Submit the form
+              document.getElementById('checkout-form').submit();
+                
+              }
+          });
+      
+      });
+      function getSelectedPaymentType() {
+          return document.querySelector('input[name="paymentType"]:checked').value;
+      }
+      
+      </script>
+  
+      <!-- JavaScript Libraries -->
+      <!-- Include Razorpay SDK in your HTML -->
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+     
+  </body>
+  
+</html>

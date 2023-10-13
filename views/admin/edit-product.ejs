@@ -1,0 +1,56 @@
+<%- include('../layout/header.ejs') %>
+
+<div class="container mt-5 pt-5">
+    <div class="row mt-5 pt-5">
+        <div class="col-lg-6  mt-5 pt-5">
+            <h2>Edit Product</h2>
+            <form method="POST" action="/admin/update-product/<%= product._id %>">
+                <!-- Add input fields for editing product properties -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<%= product.title %>">
+                </div>
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description</label>
+                    <textarea class="form-control" id="desc" name="desc"><%= product.desc%></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text" class="form-control" id="price" name="price" value="<%= product.price %>">
+                </div>
+                <div class="mb-3">
+                    <label for="stocks" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="stocks" name="stocks" value="<%= product.stocks %>">
+                </div>
+                <div class="mb-3">
+                    <label for="userCanVisible" class="form-label">User Can Visible</label>
+                    <select class="form-select" name="userCanVisible" id="userCanVisible">
+                        <option value="true" <% if (product.userCanVisible === true) { %>selected<% } %>>True</option>
+                        <option value="false" <% if (product.userCanVisible === false) { %>selected<% } %>>False</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <h2 class="mt-4">Edit  Images</h2>
+            <% for (let i = 0; i < product.images.length; i++) { %>
+            <form action="/admin/edit-product/<%= product._id %>/edit-images/<%= i %>" method="POST" enctype="multipart/form-data">
+              
+                <!-- Existing product images -->
+                <div class="mb-3">
+                    <img src="<%= product.adminProductImage[i] %>" alt="Product Image" class="img-fluid">
+                </div>
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="image" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<%- include('../layout/footer.ejs') %>

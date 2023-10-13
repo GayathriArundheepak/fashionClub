@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+            /* justify-content: center; */
+            height: 100vh;
+        }
+
+        h1 {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: white;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .no-orders-message {
+            font-size: 24px; /* Adjust the font size as needed */
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Style for Return / Exchange button */
+        .return-exchange-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+
+        .return-exchange-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Your Orders</h1>
+    <ul>
+        <% if (orders.length === 0) { %>
+            <li>
+                <p class="no-orders-message">You currently have no orders.</p>
+            </li>
+            <% } else { %>
+                <% orders.forEach((order) => { %>
+                  
+                    <li>
+                    <img src="/images/logoFashionClub.png" alt="logoFashionClub" style="width: 100%; max-width: 300px"><br>
+                    <strong>Order placed date and time:</strong>
+                    <% const orderDate = new Date(order.createdAt); %>
+                    <%= orderDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: true, year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %><br>
+                    <br>
+                    <strong>Order ID:</strong> <%= order._id %><br><br>
+                    <strong>Amount:</strong>$<%= order.amount %><br><br>
+                    <strong>Payment:</strong> <%= order.paymentId.paymentType %><br><br>
+
+                    <strong>Status:</strong> <%= order.orderStatus %><br><br>
+                    <strong>Address:</strong> <br>
+                    <% order.address.forEach((object) => { %>
+                        <p ><%= object.houseNO %>,<%= object.cityOrVillage %>,
+                       <%= object.street %>,
+                      <%= object.district %>,
+                        <%= object.state %>,
+                       <%= object.country %>,
+                      PIN:<%= object.pin %></p>
+                        <% }) %>
+                    <!-- <strong>Payment ID:</strong> <%= order.paymentId %><br> -->
+                    <strong>Products:</strong>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Order Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% order.products.forEach((product)=> { %>
+                                <tr>
+                                    <td><%= product.productName %></td>
+                                    <td><%= product.quantity %></td>
+                                    <td>$<%= product.price %></td>
+                                    <td><%= product.itemOrderStatus %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                    <!-- Add more order details as needed -->
+
+                    <!-- Display the "Return / Exchange" button for orders that are delivered -->
+                    <% if (order.orderStatus === 'Delivered') { %>
+                        <form action="/return-exchange" method="POST">
+                            <!-- Pass the order ID to the server when the button is clicked -->
+                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                            <button class="return-exchange-button" type="submit">Return / Exchange</button>
+                        </form>
+                    <% } %>
+                      <!-- Display the "Return / Exchange" button for orders that are delivered -->
+                      <% if (order.orderStatus === 'Shipped'|| order.orderStatus === 'Pending') { %>
+                        <form id="<%= `cancelOrderForm${order._id}` %>"   action="/orderCancel" method="POST">
+                   
+                            <!-- Pass the order ID to the server when the button is clicked -->
+                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                            <!-- <button class="return-exchange-button" type="submit">cancel Order</button> -->
+                            <button  class="return-exchange-button" type="button" onclick="confirmCancellation('<%= order._id %>')">Cancel Order</button>
+                        </form>
+                    <% } %>
+                    <% if (order.orderStatus !== 'cancelled') { %>
+                        <a href="/payment/generate-invoice/<%= order._id %>" class="btn btn-primary" style="text-decoration: none;padding-left: 90%;">Download Invoice</a>
+                    <% } %>
+                </li>
+            <% }) %>
+            
+        <% } %>
+    </ul>
+
+    <script>
+        function confirmCancellation(orderId) {
+          Swal.fire({
+            title: 'Confirm Cancellation',
+            text: 'Are you sure you want to cancel this order? ',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, confirm cancel it!',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // If the user confirms, submit the cancellation form
+              document.getElementById(`cancelOrderForm${orderId}`).submit();
+            }
+          });
+        }
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
+
+
+
+<!-- ... Rest of your HTML ... -->
+

@@ -1,0 +1,98 @@
+
+<% include('../layout/header.ejs') %>
+
+<title>Admin Home</title>
+
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+<style>
+    .container {
+        padding: 2rem 0rem;
+    }
+
+    h4 {
+        margin: 2rem 0rem 1rem;
+    }
+
+    .table-image {
+        td, th {
+            vertical-align: middle;
+        }
+    }
+</style>
+
+<div class="admin-dashboard">
+    <h2>Admin Dashboard</h2>
+
+    <div class="" style='top: 200px;left: 600px;'>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-image">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">Day</th> -->
+                            <th scope="col">Image</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Description</th>
+                            <!-- <th scope="col">Sizes</th> -->
+                            <th scope="col">Price</th>
+                            <th scope="col">Total stock</th>
+                            <th scope="col">Actions</th> <!-- Add Actions column for Edit and Delete buttons -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach(product => { %>
+                            <tr>
+                                <!-- <th scope="row">1</th> -->
+                                <td class="w-25">
+                                    <img src="<%= product.adminProductImage[0] %>" alt="<%= product.title %>" />
+                                </td>
+                                <td><%= product.title %></td>
+                                <td><%= product.desc %></td>
+                             
+                                <td><%= product.price %></td>
+                                <td><%= product.stocks %></td>
+                                <td>
+                                    <a href="/admin/edit-product/<%= product._id %>"  class="btn " >Edit</a><br>
+                                    <a href="/admin/delete-product/<%= product._id %>" class="btn ">Delete</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                            <!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <% if (page > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page - 1 %>" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+      <% } %>
+  
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+        </li>
+      <% } %>
+  
+      <% if (page < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page + 1 %>">Next</a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+  <!-- End Pagination -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include('../layout/footer.ejs') %>
+
+

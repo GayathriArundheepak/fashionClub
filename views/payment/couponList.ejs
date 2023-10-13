@@ -1,0 +1,70 @@
+
+<%- include('../layout/header.ejs') %>
+<title>home</title>
+
+</head>
+<style>
+  p{
+    color: #D19C97;
+  }
+</style>
+<body>
+    
+  
+<!-- Offer Start -->
+<div class="container-fluid offer pt-5">
+  <h1 style="color: #D19C97;text-align: center;">COUPONS</h1>
+    <div class="row px-xl-5">
+    
+     
+          <% coupons.forEach(function(coupon) { %>
+           
+              <div class="col-md-4 pb-4"> <br><!-- Change col-md-6 to col-md-12 -->
+                <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+          
+                  <div class="position-relative" style="z-index: 1;">
+                  
+                  
+                    <p class="mb-4"><strong>discount:</strong> <%= coupon.discountPercentage %>%</p>
+                    <p class="mb-4"><strong >Minimum Order</strong> <%= coupon.minOrderAmount %></p>
+                    <p class="mb-4"><strong>Expiration:</strong> <%= coupon.expirationTime %></p>
+                    <a href="" class="btn btn-outline-primary py-md-2 px-md-3"><%= coupon.code %></a>
+                    <button class="btn btn-outline-primary" onclick="copyToClipboard('<%= coupon.code %>')">Copy</button>
+                    <span id="<%= coupon.code %>" style="display: none;"><%= coupon.code %></span>
+                  
+                          
+                  </div>
+                </div>
+              </div>
+              
+             
+          <% }); %>
+          
+  >
+
+    </div>
+  </div>
+  <!-- Offer End -->
+
+  <script>
+    function copyToClipboard(code) {
+        const couponCodeElement = document.getElementById(code);
+        const couponCode = couponCodeElement.textContent;
+
+        // Create a temporary input element to copy the coupon code
+        const tempInput = document.createElement('input');
+        document.body.appendChild(tempInput);
+        tempInput.value = couponCode;
+        tempInput.select();
+
+        // Copy the coupon code to the clipboard
+        document.execCommand('copy');
+
+        // Remove the temporary input element
+        document.body.removeChild(tempInput);
+
+        // Optionally, show a confirmation message
+        alert('Coupon code copied to clipboard: ' + couponCode);
+    }
+</script>
+    <%- include('../layout/footer.ejs') %> 

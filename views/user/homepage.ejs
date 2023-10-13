@@ -1,0 +1,147 @@
+
+<%- include('../layout/header.ejs') %>
+<title>home</title>
+
+</head>
+
+<body>
+    
+ 
+ <!-- Topbar Start -->
+ <%- include('./userpartials/Topbar.ejs') %>
+<!-- Topbar End -->
+
+  
+      <!-- Navbar Start -->
+      <%- include('./userpartials/Navbar.ejs') %>
+    <!-- Navbar End -->
+<!-- banner starts -->
+<br>
+<% banners.forEach((banner, index) => { %> 
+    <div class="pl-5 pt-5 ">
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="height: 410px;">
+            
+                <img class="img-fluid" src="<%= banner.imageUrl[0] %>" alt="Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="p-3" style="max-width: 700px;">
+                        <!-- <h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First Order</h4>
+                            <h3 class="display-4 text-white font-weight-semi-bold mb-4">Fashionable Dress</h3>
+                            <a href="" class="btn btn-light py-2 px-3">Shop Now</a> -->
+                            <h4 class="text-light text-uppercase font-weight-medium mb-3"><%= banner.title %></h4>
+                            <h3 class="display-4 text-white font-weight-semi-bold mb-4"><%= banner.description %></h3>
+                            <a href="<%= banner.buttonLink %>" class="btn btn-light py-2 px-3"><%= banner.buttonText %></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" style="height: 410px;">
+              
+                    <img class="img-fluid" src="<%= banner.imageUrl[1] %>" alt="Image">
+                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                        <div class="p-3" style="max-width: 700px;">
+                            <h4 class="text-light text-uppercase font-weight-medium mb-3"><%= banner.title %></h4>
+                            <h3 class="display-4 text-white font-weight-semi-bold mb-4"><%= banner.description %></h3>
+                        <a href="<%= banner.buttonLink %>" class="btn btn-light py-2 px-3"><%= banner.buttonText %></a>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+            <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                <span class="carousel-control-prev-icon mb-n2"></span>
+            </div>
+        </a>
+        <a class="carousel-control-next" href="#header-carousel" data-slide="next">
+            <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                <span class="carousel-control-next-icon mb-n2"></span>
+            </div>
+        </a>
+    </div>
+    
+    <% }) %>
+</div>
+<!-- Products Start -->
+<div class="container-fluid pt-5" id="products">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Trandy Products</span></h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        <% products.forEach(product => { %>
+            <% if (product.userCanVisible === true) { %>
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid w-100" src="<%= product.images[0] %>" alt="<%= product.title %>">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3"><%= product.title %></h6>
+                            <div class="d-flex justify-content-center">
+                                <h6><%= product.price %></h6>
+                        <h6 class="text-muted ml-2"><del>$5000</del></h6>
+                    </div>
+                
+                            
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="/productDtailes/<%= product._id %>"
+                                class="btn btn-sm text-dark p-0"><i class="fas fa-eye  mr-1"></i>View Detail</a>
+                          
+                                 <a href="/cart/add-to-wishlist/<%= product._id %>" class="btn "><i id="heart" class="fas fa-heart" onclick="toggleTextPrimary(this)"></i></a>
+
+                                   <a href="/cart/add-to-cart/<%= product._id %>" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"  ></i>Add To Cart</a>
+               
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% }); %>
+    </div>
+      <!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <% if (page > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page - 1 %>" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+      <% } %>
+  
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+        </li>
+      <% } %>
+  
+      <% if (page < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page + 1 %>">Next</a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+  <!-- End Pagination -->
+</div>
+<!-- Products End -->
+
+  <!-- Footer Start -->
+  <%- include('./userpartials/Footer.ejs') %>
+  <!-- Footer End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <!-- wishlist -->
+    <script>
+        function toggleTextPrimary(icon) {
+            // Toggle the 'text-primary' class on each click
+            icon.classList.toggle('text-primary');
+        }
+    </script>
+    
+  <!-- JavaScript Libraries -->
+  
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+   
+<%- include('../layout/footer.ejs') %> 

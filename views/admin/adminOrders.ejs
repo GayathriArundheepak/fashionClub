@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Orders</title>
+   <!-- Font Awesome -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+
+
+   <!-- Customized Bootstrap Stylesheet -->
+   <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    
+    <div class="row px-xl-5">
+        <div class="col-lg-12 table-responsive mb-5">
+            <img src="/images/logoFashionClub.png" alt="logoFashionClub" style="width: 100%; max-width: 300px"><br>
+            
+            <div class="container-fluid  col-4">
+                <h4 class="">Sales Report</h4>
+                <form action="/admin/download-sales-report" method="POST" class="mt-4">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="year">Select Year:</label>
+                            <select name="year" id="year" class="form-control">
+                                <!-- Populate the select options with available years -->
+                                <% for (let year = new Date().getFullYear(); year >= 2015; year--) { %>
+                                    <option value="<%= year %>"><%= year %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="month">Select Month:</label>
+                            <select name="month" id="month" class="form-control">
+                                <!-- Populate the select options with month names -->
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                                <!-- Add more months here -->
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </form>
+                <br>
+                <br>
+                
+                <h4 class="">cancel Report</h4>
+                <form action="/admin/download-cancel-report" method="POST" class="mt-4">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="year">Select Year:</label>
+                            <select name="year" id="year" class="form-control">
+                                <!-- Populate the select options with available years -->
+                                <% for (let year = new Date().getFullYear(); year >= 2015; year--) { %>
+                                    <option value="<%= year %>"><%= year %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="month">Select Month:</label>
+                            <select name="month" id="month" class="form-control">
+                                <!-- Populate the select options with month names -->
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                                <!-- Add more months here -->
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </form>
+            </div>
+           <br>
+           <br>
+        <h1 style="color: #009688 ;text-align: center;"> Orders</h1><br>
+                <table class="table table-bordered mb-5 col-12">
+                    <thead>
+                        <tr>
+                            <th>Date (order placed)</th>
+                            <th>customer Name</th>
+                            <th>Order ID</th>
+                            <th>Amount (rs)</th>
+                            <th>Products</th>
+                            <th>Order Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach((order) => { %>
+                            <tr>
+
+                                <td><%= order.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: true, year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) %></td>
+                                <td><%= order.customerName %></td>
+                                <td><%= order._id %></td>
+                                <td><%= order.amount %></td>
+                                <td>
+                                    <% order.products.forEach((product) => { %>
+                                       
+                                            <li><%= product.productName %> (Quantity: <%= product.quantity %>)</li>
+                                  
+                                        <% }) %>
+                                </td>
+                                <td><%= order.orderStatus %></td>
+                                <td>
+
+                                    <form action="/admin/orders/edit/<%= order._id %>" method="POST">
+                                        <select name="orderStatus" class="form-select custom-select">
+                                            <option value="Pending" <% if (order.orderStatus === 'Pending') { %>selected<% } %>>Pending</option>
+                                            <option value="Shipped" <% if (order.orderStatus === 'Shipped') { %>selected<% } %>>Shipped</option>
+                                            <option value="Delivered" <% if (order.orderStatus === 'Delivered') { %>selected<% } %>>Delivered</option>
+                                        </select>
+                                     
+                                        <button type="submit" class="btn ">Save</button>
+                                    </form>
+                                   
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                  <!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <% if (page > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page - 1 %>" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+      <% } %>
+  
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+        </li>
+      <% } %>
+  
+      <% if (page < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page + 1 %>">Next</a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+  <!-- End Pagination -->
+            </div>
+           
+        </div>
+    </div>
+    
+</body>
+</html>

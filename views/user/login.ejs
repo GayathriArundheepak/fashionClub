@@ -1,0 +1,75 @@
+
+<%- include('../layout/header.ejs') %>
+<title>signup</title>
+
+
+</head>
+<body>
+
+
+ 
+  <div class="container">
+    <div class="login form">
+      <img src="/images/logoFashionClub.png" alt="logo of FashionClub">
+      <header>Login</header>
+      <form action="/login"  id="signup-form" method="POST">
+        <label class="error" for="username"></label>
+        <input name="username" type="text" placeholder="  Name" required>
+        <label class="error" for="password"></label>
+        <input  name="password" id="password" type="password" placeholder="  password"  >
+        <a href="/reset-password">Forgot password?</a>
+        <input type="submit" class="button" value="Login">
+        <p>   <%=message%></p>
+      </form>
+      <div class="signup">
+        <span class="signup">Don't have an account?
+        <a href="/register"  >signup</a>
+        </span>
+      </div>
+    </div>
+   
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+
+  <!-- jquery-validation -->
+<script>
+  $(document).ready(function(){
+  $("#signup-form").validate({
+    rules:{
+        username:{
+            required:true,
+            minlength:4,
+            maxlength:12
+        },
+        email:{
+            required:true,
+            email:true
+        },
+        password:{
+            required:true,
+            minlength:6,
+            
+            
+        },
+       
+    },
+        messages:{
+        username:{
+        required:"Enter your Name"
+        
+    }, 
+    password:{
+        required: "please enter password",
+
+
+
+    }
+  
+}
+})
+})
+</script>
+
+<% include('../layout/footer.ejs') %>
+

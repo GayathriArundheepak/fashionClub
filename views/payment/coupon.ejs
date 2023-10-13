@@ -1,0 +1,144 @@
+<!-- views/createCoupon.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Coupon</title>
+    <!-- Add your CSS stylesheets or include a CSS framework here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+        }
+        .container{
+         padding-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 99%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color:#009688;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color:#009688;
+        }
+.error{
+    color:#009688;
+}
+        /* You can add more styles as needed */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center;">
+        <img src="/images/logoFashionClub.png" alt="logoFashionClub" style="width: 100%; max-width: 300px"><br>
+        <h1>Create a Coupon</h1>
+    </div>
+    <form id="coupon-form" method="POST" action="/payment/create-coupon">
+        <div>
+            <label class="error" for="code">Coupon Code:</label>
+            <input type="text" id="code" name="code" required>
+        </div>
+        <div>
+            <label class="error" for="discountPercentage">Discount Percentage:</label>
+            <input type="number" id="discountPercentage" name="discountPercentage" min="1" max="100" required>
+        </div>
+        <div>
+            <label class="error" for="minOrderAmount">Minimum Order Amount:</label>
+            <input type="number" id="minOrderAmount" name="minOrderAmount" min="0" required>
+        </div>
+        <div class="form-group">
+            <label class="error" for="expirationTime">Expiration Date:</label>
+            <input type="date" id="expirationTime" name="expirationTime" required>
+        </div>
+        <button type="submit">Create Coupon</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script> 
+
+<script>
+    $(document).ready(function () {
+      $("#coupon-form").validate({
+        rules: {
+          code: {
+            required: true,
+          },
+          discountPercentage: {
+            required: true,
+            min: 1,
+            max: 100,
+          },
+          minOrderAmount: {
+            required: true,
+            min: 0,
+          },
+          expirationTime: {
+            required: true,
+          },
+        },
+        messages: {
+          code: {
+            required: "Please enter a coupon code",
+          },
+          discountPercentage: {
+            required: "Please enter a discount percentage",
+            min: "Discount percentage should be at least 1%",
+            max: "Discount percentage should not exceed 100%",
+          },
+          minOrderAmount: {
+            required: "Please enter a minimum order amount",
+            min: "Minimum order amount should be 0 or greater",
+          },
+          expirationTime: {
+            required: "Please select an expiration date",
+          },
+        },
+      });
+    });
+    </script>
+    
+    
+</body>
+</html>

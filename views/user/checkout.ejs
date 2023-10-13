@@ -1,0 +1,375 @@
+<%- include('../layout/header.ejs') %>
+<title>home</title>
+<!-- Include SweetAlert CSS and JavaScript -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@12.7.0/dist/sweetalert2.min.css">
+<style>
+  p{
+    color: #D19C97;
+  }
+</style>
+
+</head>
+
+<body>
+    
+ 
+ <!-- Topbar Start -->
+ <%- include('./userpartials/Topbar.ejs') %>
+<!-- Topbar End -->
+
+  
+      <!-- Navbar Start -->
+      <%- include('./userpartials/Navbar.ejs') %>
+    <!-- Navbar End -->
+  
+  
+<!-- Offer Start -->
+<div class="container-fluid offer pt-5">
+  <div class="row px-xl-5">
+  
+   
+        <% coupons.forEach(function(coupon, index) { %>
+          <%  if(totalPrice>= coupon.minOrderAmount){ %>
+            <div class="col-md-4 pb-4"> <!-- Change col-md-6 to col-md-12 -->
+              <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+        
+                <div class="position-relative" style="z-index: 1;">
+                
+                
+                  <p class="mb-4"><strong>discount:</strong> <%= coupon.discountPercentage %>%</p>
+                  <p class="mb-4"><strong >Minimum Order</strong> <%= coupon.minOrderAmount %></p>
+                  <p class="mb-4"><strong>Expiration:</strong> <%= coupon.expirationTime %></p>
+                  <a href="" class="btn btn-outline-primary py-md-2 px-md-3"><%= coupon.code %></a>
+                  <button class="btn btn-outline-primary" onclick="copyToClipboard('<%= coupon.code %>')">Copy</button>
+                  <span id="<%= coupon.code %>" style="display: none;"><%= coupon.code %></span>
+                </div>
+              </div>
+            </div>
+            
+            <%  } %>
+        <% }); %>
+ 
+   
+  </div>
+</div>
+<!-- Offer End -->
+
+
+      
+      
+      <!-- Checkout Start -->
+      <!-- <div class="collapse mb-4" id="shipping-address"> -->
+      <div class="container-fluid pt-5">
+        <div class="row px-xl-5 ">
+          <div class="col-lg-8 ">
+            <div class="mb-4 ">
+          
+                
+
+              
+              <div class="mb-5 col-lg-9"  >
+                            <% addresses.forEach((address) => { %>
+                    
+                            <%  if( !address.userAddress){ %>
+                              <form action="/profile/addresses/add" method="POST">
+                                <h1 style="color:#009688;"> Add Address</h1>
+                                <div class="form-group">
+                                    <label for="houseNO">HouseNO/Name:</label>
+                                    <input type="text" class="form-control" id="houseNO" name="houseNO" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <input type="text" class="form-control" id="country" name="country" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State:</label>
+                                    <input type="text" class="form-control" id="state" name="state" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="district">District:</label>
+                                    <input type="text" class="form-control" id="district" name="district" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cityOrVillage">City or Village:</label>
+                                    <input type="text" class="form-control" id="cityOrVillage" name="cityOrVillage" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="street">Street:</label>
+                                    <input type="text" class="form-control" id="street" name="street" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pin">Pin:</label>
+                                    <input type="text" class="form-control" id="pin" name="pin" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save and use Address</button>
+                            </form>
+                            <%  }else{%>
+                        <% address.userAddress.forEach((object) => { %>
+
+                          <div class="list-group-item" id="selected_address_<%= object._id %>" <% if (object.selected) { %> style="background-color: #00968817;" <% } %>>
+
+
+                                <h5 class="font-weight-semi-bold mb-3">Address</h5>
+                                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i><strong>House No/Name:</strong> <%= object.houseNO %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>City/Village:</strong> <%= object.cityOrVillage %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>Street:</strong> <%= object.street %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>District:</strong> <%= object.district %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>State:</strong> <%= object.state %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>Country:</strong> <%= object.country %></p>
+                                <p class="mb-2"><i class="fa  text-primary mr-3"></i><strong>Pin:</strong> <%= object.pin %></p>
+                                <%  if(object.selected===true){ %>
+                                  <strong> default address</strong>  
+                             
+                             <%  }else{ %>
+                                <a href="/profile/addresses/selectedAddress/<%= object._id %>" class="btn ml-2"><strong>Choose this address</strong>  </a> 
+                                <%  } %>
+                            </div>
+                            
+                       <% }) %>
+                       
+                            <br>
+                           
+                                  
+                            <%  }%>
+                            <% }) %>
+                        </div>
+                            </div>
+                        </div>
+       
+              
+              <div class="col-lg-4 mt-5">
+             
+              
+              <%  if (totalPrice >= maxAmount){ %> 
+                        
+                          
+                <%  if (discountAmount !== 0 ){ %> 
+                  <form class="mb-5" action="/payment/remove-coupon/<%=totalPrice %> "  method="post">
+                    <div class="input-group">
+                        <input type="text" class="form-control p-4 " name="couponCode" value=" <%= couponCode %>">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary">Remove Coupon</button>
+                        </div>
+                    </div>
+                </form>
+                    <%  }else{ %> 
+                   
+                      <form class="mb-5" action="/payment/apply-coupon/<%=totalPrice %> "  method="post">
+                        <div class="input-group">
+                            <input type="text" class="form-control p-4 " name="couponCode" placeholder="Coupon Code">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary">Apply Coupon</button>
+                            </div>
+                        </div>
+                    </form>
+                  <%  } %> 
+                  <%  } %> 
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                </div>
+                <div class="card-body">
+                  <% if(cartData !== null){ %>
+                    <h5 class="font-weight-medium mb-3">Products</h5>
+                    <%cartData.items.forEach(item => { %>
+                    <div class="d-flex justify-content-between">
+                        <p name="productName"><%= item.productId.title %> <span>(<%= item.quantity %>)</span></p>
+                        <p>$<%= item.productId.price*item.quantity  %></p>
+                    </div>
+                    <% }); %>
+                    <%  } %> 
+                 <hr class="mt-0"> 
+                <div class="d-flex justify-content-between mb-3 pt-1">
+                    <h6 class="font-weight-medium">Subtotal</h6>
+                    <h6 class="font-weight-medium"><%= totalPrice %> </h6>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <h6 class="font-weight-medium">Shipping</h6>
+                    <h6 class="font-weight-medium">Free</h6>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <h6 class="font-weight-medium">Discount</h6>
+                  <% if (discountAmount !== null) { %>
+                    <h6 class="font-weight-medium">-$<%= discountAmount %></h6>
+                    <% } %>
+                </div>
+      
+                </div>
+                  
+                
+                <!-- Update the total price to reflect the discount -->
+                <div class="card-footer border-secondary bg-transparent">
+                  <div class="d-flex justify-content-between mt-2">
+                    <h5 class="font-weight-bold">Total</h5>
+                    <h5 class="font-weight-bold" id="totalPrice" name="totalPrice" data-total-price="<%= (totalPrice - discountAmount) %>">$<%= (totalPrice - discountAmount) %></h5>
+                  </div>
+                </div>
+            </div>
+            
+            
+                    <form id="checkout-form" action="/cart/checkoutSubmission/<%=totalPrice %>" method="POST">
+                    <div class="card border-secondary mb-5">
+                        <div class="card-header bg-secondary border-0">
+                            <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                        </div>
+                        <div class="card-body">
+                          <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" name="paymentType" id="upi" value="UPI">
+                                  <label class="custom-control-label"  for="upi">UPI</label>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" name="paymentType" id="cod" value="COD">
+                                  <label class="custom-control-label" for="cod">COD(cash on delivery)</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" name="paymentType" id="wallet" value="wallet">
+                                  <label class="custom-control-label" for="wallet">wallet</label>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-footer border-secondary bg-transparent">
+                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" id="place-order-button" type="submit" >Place Order</button>
+                        
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- Checkout End -->
+  
+
+      <!-- Footer Start -->
+      <%- include('./userpartials/Footer.ejs') %>
+      <!-- Footer End -->
+  
+  
+      <!-- Back to Top -->
+      <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Function to handle online payment
+    function online() {
+        const totalPrice = document.getElementById('totalPrice').getAttribute('data-total-price');
+
+        var options = {
+            "key": "<%= MYRAZORPAY_API_KEY %>",
+            "amount": totalPrice * 100,
+            "currency": "INR",
+            "name": "Fashion Club",
+            "theme": {
+                "color": "#009688"
+            },
+            "order_id": undefined,
+            "handler": function (response) {
+                document.getElementById('checkout-form').submit();
+            },
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    // Function to show SweetAlert notification
+    function showSweetAlert(selectedPaymentType) {
+        // Get the selected payment type
+
+        // Check if the payment type is "COD" or "wallet"
+        if (selectedPaymentType === "COD" || selectedPaymentType === "wallet") {
+            // Show a SweetAlert based on the payment type
+            Swal.fire({
+                icon: 'info',
+                title: `Payment Type: ${selectedPaymentType}`,
+                text: 'You have selected this payment method.',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                // Check if the user clicked "OK"
+                if (result.isConfirmed) {
+                    // Submit the form
+                    document.getElementById('checkout-form').submit();
+                }
+            });
+        }
+    }
+
+    // Add an event listener to the "Place Order" button
+    document.getElementById('place-order-button').addEventListener('click', function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        const selectedPaymentType = getSelectedPaymentType();
+
+        if (selectedPaymentType === "UPI") {
+            // Call the online function when UPI is selected
+            online();
+        } else {
+           
+     // Show a SweetAlert based on the payment type
+    //  Swal.fire({
+    //             icon: 'info',
+    //             title: `Payment Type: ${selectedPaymentType}`,
+    //             text: 'You have selected this payment method.',
+    //             confirmButtonText: 'OK'
+    //         }).then((result) => {
+    //             // Check if the user clicked "OK"
+    //             if (result.isConfirmed) {
+    //                 // Submit the form
+    //                 document.getElementById('checkout-form').submit();
+    //             }
+    //         });
+    alert(`You are selected ${selectedPaymentType},Let proceed`);
+        
+        // Submit the form
+        document.getElementById('checkout-form').submit();
+          
+        }
+    });
+
+});
+function getSelectedPaymentType() {
+    return document.querySelector('input[name="paymentType"]:checked').value;
+}
+
+</script>
+
+
+<script>
+  function copyToClipboard(code) {
+      const couponCodeElement = document.getElementById(code);
+      const couponCode = couponCodeElement.textContent;
+
+      // Create a temporary input element to copy the coupon code
+      const tempInput = document.createElement('input');
+      document.body.appendChild(tempInput);
+      tempInput.value = couponCode;
+      tempInput.select();
+
+      // Copy the coupon code to the clipboard
+      document.execCommand('copy');
+
+      // Remove the temporary input element
+      document.body.removeChild(tempInput);
+
+      // Optionally, show a confirmation message
+      alert('Coupon code copied to clipboard: ' + couponCode);
+  }
+</script>
+
+      <!-- JavaScript Libraries -->
+      <!-- Include Razorpay SDK in your HTML -->
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@12.7.0/dist/sweetalert2.all.min.js"></script>   
+  </body>
+  
+</html>

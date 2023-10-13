@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Dashboard</title>
+    <!-- Include Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    >
+  </head>
+  <body>
+    <% if( banner.length === 0) {%>
+    <div class="container mt-5">
+      <h1 class="mb-4">Add  Banner</h1>
+      <form
+        action="/admin/upload-banner"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+          >
+        </div>
+    
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            name="description"
+            required
+          >
+        </div>
+    
+        <div class="form-group">
+          <label for="buttonText">Button Text:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="buttonText"
+            name="buttonText"
+            required
+          >
+        </div>
+    
+        <div class="form-group">
+          <label for="buttonLink">Button Link:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="buttonLink"
+            name="buttonLink"
+            required
+          >
+        </div>
+    
+        <div class="form-group">
+          <input type="checkbox" class="form-check-input" id="isActive" name="isActive">
+          <label for="isActive">Active:</label>
+        </div>
+    
+        <div class="form-group">
+          <label for="bannerImages">Banner Images:</label>
+          <input
+            type="file"
+            class="form-control-file"
+            id="bannerImages"
+            name="bannerImages"
+            accept="image/*"
+            multiple
+            required
+          >
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Upload Banner</button>
+      </form>
+    </div>
+    <% } else{ %>
+      <div class="container mt-5">
+        <h1 class="mb-4">Edit Banner</h1>
+        <form
+          action="/admin/edit-banner/<%= banner._id %>" 
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              required
+              value="<%= banner.title %>">
+          </div>
+      
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="description"
+              name="description"
+              required
+              value="<%= banner.description %>" 
+            >
+          </div>
+      
+          <div class="form-group">
+            <label for="buttonText">Button Text:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="buttonText"
+              name="buttonText"
+              required
+              value="<%= banner.buttonText %>" 
+            >
+          </div>
+      
+          <div class="form-group">
+            <label for="buttonLink">Button Link:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="buttonLink"
+              name="buttonLink"
+              required
+              value="<%= banner.buttonLink %>" 
+            >
+          </div>
+      
+          <div class="form-group">
+            <input type="checkbox" class="form-check-input" id="isActive" name="isActive"
+             
+            >
+            <label for="isActive">Active:</label>
+          </div>
+      
+          <div class="form-group">
+            <label for="bannerImages">Banner Images:</label>
+            <input
+              type="file"
+              class="form-control-file"
+              id="bannerImages"
+              name="bannerImages"
+              accept="image/*"
+              multiple
+            >
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Update Banner</button>
+        </form>
+      </div>
+      <%  } %>
+  </body>
+</html>
+

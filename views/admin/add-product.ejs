@@ -1,0 +1,232 @@
+
+
+
+<%- include('../layout/header.ejs') %>
+
+<style>
+    h1 {
+        font-size: 20px;
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    img {
+        height: 60px;
+    }
+    input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #edfffd;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color:#009688;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #009688;
+}
+</style>
+
+<!-- upload-form.ejs -->
+ 
+<div class="col-md-6 offset-md-3 mt-5">
+    <img src="/images/logoFashionClub.png" alt="logo of FashionClub">
+    <h1 style="text-align: center;color: #009688">Add Product</h1>
+    <form id="add-product-form" action="/admin/upload" method="POST" enctype="multipart/form-data" accept-charset="UTF-8" enctype="multipart/form-data" target="_blank">
+        <label for="title"></label>
+        <input type="text" name="title" class="form-control" id="title" required="required" placeholder="Title"><br>
+
+<!-- Size and Stock Fields -->
+<!-- <div id="size-stock-container">
+    <div class=" size-stock-pair">
+        <label for="size">Size:</label>
+        <input type="text" name="sizes" class=" size-field" required="required">
+        <label for="stocks">Stock:</label>
+        <input type="text" name="stock" class=" stock-field" required="required">
+        <span class="remove-size-stock" style="color: rgb(128, 51, 0);cursor: pointer; " onclick="removeSizeStockPair(this)"></span>
+    </div>
+    <div class="add-size-stock">
+        <span class="plus-sign" style="color: rgb(12, 129, 47);cursor: pointer;" onclick="addSizeStockPair()">+</span>
+    </div>
+</div> -->
+
+<br>
+        <!-- <label for="size">Size</label>
+        <input type="text" name="size" class="form-control" id="exampleInputName" required="required"><br> -->
+
+
+        <label for="price"></label>
+        <input type="number" name="price" class="form-control" id="price" required placeholder="price"><br>
+
+        <label for="stocks"></label>
+        <input type="number" name="stocks" class="form-control" id="stocks" required placeholder="stocks"><br>
+
+        <!-- Category Dropdown -->
+        <label for="category" id="category"></label>
+        <select name="category" class="form-select" required>
+            <option value="">Select Category</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category._id %>"><%= category.name %></option>
+                <% }); %>
+            </select><br>
+            
+
+        <div class="form-outline">
+            <label for="desc" class="form-label" ></label>
+            <textarea name="desc" class="form-control" id="desc" rows="4" required placeholder="Description"></textarea><br>
+        </div>
+<!-- ... other form fields ... -->
+<div class="form-group mt-3">
+    <label for="images" class="custom-file-upload"></label>
+    <input type="file" name="images" id="images" accept="image/*" multiple required placeholder="image of the product">
+</div>
+<br>
+<button    type="submit" class="btn" style="background-color: #009688;">Upload Product</button>
+
+        <!-- <div class="form-group mt-3">
+            <label for="image" class="custom-file-upload">Images</label>
+            <input type="file" id="file upload" name="images" accept="image/*" multiple required><br>
+        </div>
+        <br>
+        <button type="submit" class="btn" style="background-color: #009688;">Upload Product</button> -->
+
+    </form>
+</div>
+<script>
+    // Function to add a new pair of size and stock fields
+    function addSizeStockPair() {
+        const container = document.getElementById('size-stock-container');
+        const pair = document.createElement('div');
+        pair.className = 'size-stock-pair';
+
+        const sizeLabel = document.createElement('label');
+        sizeLabel.textContent = 'Size:';
+        const sizeInput = document.createElement('input');
+        sizeInput.type = 'text';
+        sizeInput.name = 'sizes';
+        sizeInput.className = 'size-field';
+        sizeInput.required = true;
+
+        const stockLabel = document.createElement('label');
+        stockLabel.textContent = 'Stock:';
+        const stockInput = document.createElement('input');
+        stockInput.type = 'text';
+        stockInput.name = 'stock';
+        stockInput.className = ' stock-field';
+        stockInput.required = true;
+
+        const removeButton = document.createElement('span');
+        removeButton.className = 'remove-size-stock';
+        removeButton.textContent = '-';
+        removeButton.onclick = function () {
+            removeSizeStockPair(pair);
+        };
+
+        pair.appendChild(sizeLabel);
+        pair.appendChild(sizeInput);
+        pair.appendChild(stockLabel);
+        pair.appendChild(stockInput);
+        pair.appendChild(removeButton);
+
+        container.insertBefore(pair, document.querySelector('.add-size-stock'));
+    }
+
+    // Function to remove a pair of size and stock fields
+    function removeSizeStockPair(pair) {
+        const container = document.getElementById('size-stock-container');
+        if (container.contains(pair)) {
+            container.removeChild(pair);
+        }
+    }
+
+    // Add an event listener to the plus sign
+    const plusSign = document.querySelector('.add-size-stock .plus-sign');
+    plusSign.addEventListener('click', addSizeStockPair);
+</script>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+<script>
+    $(document).ready(function () {
+      $("#add-product-form").validate({
+        rules: {
+          title: {
+            required: true,
+            alphanumeric: true, // Custom rule to allow letters and numbers
+          },
+          price: {
+            required: true,
+            min: 0, 
+            digits: true, // Only allow integer values
+          },
+          stocks: {
+            required: true,
+            min: 0, 
+            digits: true, // Only allow integer values
+          },
+          category: {
+            required: true,
+            notEqual: "Select Category", // Custom rule to ensure category is selected
+          },
+          desc: {
+            required: true,
+            minlength: 20,
+            maxlength: 100,
+          },
+        },
+        messages: {
+          title: {
+            required: "Enter a Title",
+            alphanumeric: "Title can only include letters and numbers",
+          },
+          price: {
+            required: "Enter a Price", 
+            min: "Price should be a non-negative integer",
+            digits: "Price should be an integer",
+          },
+          stocks: {
+            required: "Enter Stock",
+            min: "Stock should be a non-negative integer",
+            digits: "Stock should be an integer",
+          },
+          category: {
+            required: "Select a Category",
+            notEqual: "Please select a category",
+          },
+          desc: {
+            required: "Enter a Description",
+            minlength: "Description should be at least 20 characters",
+            maxlength: "Description should not exceed 30 characters",
+          },
+        },
+        submitHandler: function (form) {
+        // Check if price and stocks are non-negative
+        const price = parseInt($("#price").val());
+        const stocks = parseInt($("#stocks").val());
+
+        if (price >= 0 && stocks >= 0) {
+          // If both values are non-negative, submit the form
+          form.submit();
+        } else {
+          // Display an error message for negative values
+          alert("Price and Stocks must be non-negative.");
+        }
+      },
+      });
+    
+      // Custom validation method to ensure category is not "Select Category"
+      $.validator.addMethod("notEqual", function (value, element, param) {
+        return this.optional(element) || value !== param;
+      });
+    });
+    </script>
+    
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<%- include('../layout/footer.ejs') %>
+
+
+
