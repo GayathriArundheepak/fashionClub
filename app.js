@@ -16,7 +16,7 @@ const paymentRouter = require("./routes/payment");
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.DATABASE_URL, {
+  .connect(process.env.MONGO_URL , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
