@@ -31,40 +31,6 @@ app.listen(8080, function () {
   console.log("server is running ");
 });
 
-//  const Razorpay = require('razorpay');
-
-//      var instance = new Razorpay({
-    
-//        key_id: process.env.MYRAZORPAY_API_KEY,
-//        key_secret: process.env.MYRAZORPAY_API_SECRET,
-        
-//     })
-
-//     app.get('/payment',async (req, res) => {
-//       res.sendFile("payment.html",{root :__dirname})
-//     })
-// const amount=5000;
-// app.post('/create/orderId', async (req, res) => {
-//   console.log('created orderId request Razaorpay', amount);
-  
-//   var order = {
-//     amount: amount*100,  // amount in the smallest currency unit
-//     currency: "INR",
-//     receipt: "order_rcptid_11"
-//   };
-//   res.status(201).json({
-//     sucess:true,
-//     order:order,
-//     amount:amount
-
-//   })
-//   instance.orders.create(options, function(err, order) {
-//     console.log(order);
-//     res.send({orderId:order.id})
-//   });
-
-// });
-
 
 
 

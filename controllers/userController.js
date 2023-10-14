@@ -33,15 +33,21 @@ const loadRegister = async (req, res) => {
 
 const insertUser = async (req, res) => {
     try {
+  
         const username = req.body.username;
         const email = req.body.email;
         const phoneNumber = req.body.phoneNumber;
         const password = req.body.password;
 
         const existingUser = await User.findOne({ username });
+        const existingEmail = await User.findOne({  email});
 
         if (existingUser) {
             message = "User already exists";
+            return res.render('register', { message });
+        }
+        if (existingEmail) {
+            message = "This email already have an account";
             return res.render('register', { message });
         }
 
@@ -57,7 +63,8 @@ const insertUser = async (req, res) => {
 
         
         await newUser.save();
-                res.redirect('/admin/generate-otp');
+     
+                res.redirect('/generate-otp');
             } catch (error) {
         return  res.status(500).render('error', { error, status: 500 });
     }

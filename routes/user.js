@@ -61,7 +61,7 @@ router.get('/searchProducts',auth.checkUserStatus,productController.userSearchPr
 
 
 // Route to generate and send OTP
-// router.post('/generate-otp',adminauth.otp,  otpController.generateAndSendOTP );
+router.post('/generate-otp',adminauth.otp,  otpController.generateAndSendOTP );
 router.get('/generate-otp',adminauth.otp,  otpController.generateAndSendOTP );
 // Route to handle OTP verification
 router.post('/verify-otp',auth.otp, otpController.verifyOTP);

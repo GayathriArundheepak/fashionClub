@@ -105,7 +105,7 @@ const renderOTPPage = (req, res) => {
 
 const verifyOTP = async (req, res) => {
   try {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+
    const  otp =req.body.otp;
 
     // Find the OTP record by email
@@ -113,35 +113,32 @@ const verifyOTP = async (req, res) => {
   
     
     if (!otpRecord) {
-     
+  
       return res.render('verify-otp', {  errorMessage: 'OTP not found. Please generate a new OTP.' });
     }
     
     // Check if the OTP has expired
     if (otpRecord.expiresAt < new Date()) {
       
-     
+   
       // Delete expired OTP documents
       const result = await Otp.deleteOne({ otp: otpRecord.otp});
 
       return res.render('verify-otp', {  errorMessage: 'OTP has expired. Please generate a new OTP.' });
     }
-
+  
     // Verify the entered OTP against the hashed OTP in the record
     const isOtpValid = await bcrypt.compare(otp, otpRecord.otp);
     // Delete expired OTP documents
     const result = await Otp.deleteOne({ otp: otpRecord.otp});
 
-    
     if (isOtpValid) {
-     
-      // OTP is valid, proceed to the admin dashboard or the desired page
-      // You can redirect the user or render a success page here
-      // adminName = otpRecord.user_id
+  
+ 
       res.redirect('/login');
       
     } else {
-     
+      console.log("haii6")
       // Incorrect OTP, render the verify-otp page with an error message
       return res.render('verify-otp', { errorMessage: 'Incorrect OTP. Please try again.' });
     }
