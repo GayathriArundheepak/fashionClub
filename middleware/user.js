@@ -47,7 +47,7 @@ const isLogin=async(req,res,next)=>{
         }
         else{
             res.redirect('/')
-            sweat_alert="signIn"
+           
         }
     
     } catch (error) {

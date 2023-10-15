@@ -1,7 +1,9 @@
-require('dotenv').config()
+// require('dotenv').config()
+const env = require("dotenv");
+env.config();
 const express = require("express");
 
-const path=require('path');
+// const path=require('path');
 const app = express();
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
@@ -13,7 +15,7 @@ const paymentRouter = require("./routes/payment");
 
 
 
-mongoose.set("strictQuery", false);
+// mongoose.set("strictQuery", false);
 
 mongoose
   .connect(process.env.MONGO_URL , {
