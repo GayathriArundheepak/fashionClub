@@ -1,7 +1,7 @@
 const express = require("express");
 const session =require('express-session')
 const path=require('path');
-
+const config = require("../config/config");
 
 const cartController = require("../controllers/cartController");
 const userController = require("../controllers/userController");
@@ -17,11 +17,14 @@ const router=express();
 router.set("view engine", "ejs");
 router.set('views','./views/payment');
 
+
 router.use (session({
-    secret:process.env.SESSION_SECRET,
-    cookie:{sameSite:'strict'},
-    saveUninitialized:true,
-    resave:false}))
+  secret:config.SESSION_SECRET,
+  cookie:{sameSite:'strict'},
+  saveUninitialized:true,
+  resave:false}
+  ))
+
 
 router.use((req, res, next) => {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate');

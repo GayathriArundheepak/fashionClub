@@ -1,7 +1,8 @@
 const express = require("express");
 const session =require('express-session')
 const path=require('path');
-const nocache = require('nocache');
+const config = require("../config/config");
+// const nocache = require('nocache');
 
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
