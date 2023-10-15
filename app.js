@@ -1,6 +1,6 @@
-// require('dotenv').config()
-const env = require("dotenv");
-env.config();
+require('dotenv').config()
+// const env = require("dotenv");
+// env.config();
 const express = require("express");
 
 // const path=require('path');
