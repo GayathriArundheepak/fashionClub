@@ -50,7 +50,7 @@ const uploadSingle = multer({ storage: storage, limits: { files: 1 ,fileSize:102
 
 
 router.use (session({
-    secret:process.env.SESSION_SECRET,
+    secret:config.SESSION_SECRET,
     cookie:{sameSite:'strict'},
     saveUninitialized:true,
     resave:false}

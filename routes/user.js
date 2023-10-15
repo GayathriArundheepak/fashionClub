@@ -29,7 +29,7 @@ router.use( '/css',express.static(path.join(__dirname, '../public')))
 
 
 router.use (session({
-    secret:process.env.SESSION_SECRET,
+    secret:config.SESSION_SECRET,
     cookie:{sameSite:'strict'},
     saveUninitialized:true,
     resave:false}))
