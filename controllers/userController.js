@@ -41,6 +41,7 @@ const insertUser = async (req, res) => {
 
         const existingUser = await User.findOne({ username });
         const existingEmail = await User.findOne({  email});
+        const existingPhoneNumber = await User.findOne({  phoneNumber});
 
         if (existingUser) {
             message = "User already exists";
@@ -48,6 +49,10 @@ const insertUser = async (req, res) => {
         }
         if (existingEmail) {
             message = "This email already have an account";
+            return res.render('register', { message });
+        }
+        if (existingPhoneNumber) {
+            message = "This Phone Number  already have an account";
             return res.render('register', { message });
         }
 
@@ -64,7 +69,10 @@ const insertUser = async (req, res) => {
         
         await newUser.save();
      
-                res.redirect('/generate-otp');
+              
+                res.redirect(`/generate-otp?email=${encodeURIComponent(email)}`);
+
+               
             } catch (error) {
         return  res.status(500).render('error', { error, status: 500 });
     }
@@ -162,8 +170,7 @@ const userLogout = async (req, res) => {
     try {
         req.session.user_id = null;
     
-                 // Update the user's isLoggedIn field to true.
-    // await User.updateOne( { _id: userData._id },{ $set: { isLoggedIn:false} } );
+      
         res.clearCookie('user_id');
         res.redirect('/login');
 
@@ -197,7 +204,7 @@ const resetPassword = async (req, res) => {
       // Update the user's password in the database
       user.password = hashedPassword;
       await user.save();
-    //   res.redirect("/generate-otp?query=value");
+
 
       res.redirect("/generate-otp")
     } catch (error) {

@@ -29,11 +29,12 @@ h1, p {
 
 <div class="form-box">
   <h2>OTP Verification</h2>
-  <p>Please enter the OTP sent to your mailId</p>
+  <p>Please enter the OTP sent to your <%=email %></p>
 
-  <form action="/verify-otp" method="POST">
+  <form action="/verify-otp/<%=email %>" method="POST">
     <div class="form-group">
       
+    
       <input type="text" name="otp"   placeholder="Enter OTP" required>
     </div>
     <br>

@@ -149,7 +149,7 @@ const selectAddressForOrder = async (req, res) => {
     
     if (!userAddress) {
      const message = 'User Address not found' 
-      return  res.render('adminSweetAlert.ejs', { message });
+      return  res.render('userSweetAlert.ejs', { message });
        
     }
 

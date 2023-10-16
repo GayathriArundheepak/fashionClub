@@ -46,14 +46,14 @@ const generateAndSendOTP = async (req, res) => {
   try {
 
     const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
-   
+    const email = req.query.email;
  
     const saltRounds = 10;
     const hashedOtp = await bcrypt.hash(otp,saltRounds);
     const newOtp = await new Otp({
  
-      email:adminEmail,
-    
+
+      email: email,
       otp:hashedOtp,
       expiresAt: Date,
       createdAt:Date.now(),
@@ -66,7 +66,7 @@ const generateAndSendOTP = async (req, res) => {
       setTimeout(async () => {
         try {
           // Delete the OTP document
-          await Otp.deleteOne({ email: adminEmail, createdAt: newOtp.createdAt });
+          await Otp.deleteOne({ email: email, createdAt: newOtp.createdAt });
         
         } catch (error) {
           console.error('Error deleting OTP:', error);
@@ -79,9 +79,9 @@ const generateAndSendOTP = async (req, res) => {
     
   // Send OTP via email
 
-  sendOTPEmail(adminEmail , otp);
+  sendOTPEmail(email , otp);
 
-    res.render('verify-otp', { email:adminEmail });
+    res.render('verify-otp', { email:email });
 } catch (error) {
 
       console.log(error.message);
@@ -105,16 +105,19 @@ const renderOTPPage = (req, res) => {
 
 const verifyOTP = async (req, res) => {
   try {
-
+   
    const  otp =req.body.otp;
+   const email = req.params.email; // Assuming the email is in the URL path
 
+  
     // Find the OTP record by email
-    const otpRecord = await Otp.findOne({ email: adminEmail  });
+    const otpRecord = await Otp.findOne({ email: email  });
   
     
     if (!otpRecord) {
-  
-      return res.render('verify-otp', {  errorMessage: 'OTP not found. Please generate a new OTP.' });
+      message= ' OTP not found.Generate a new OTP click ok.'
+      return res.render('userSweetAlert.ejs', { message }); 
+      // return res.render('verify-otp', {  errorMessage: 'OTP not found. Please generate a new OTP.' ,email});
     }
     
     // Check if the OTP has expired
@@ -124,7 +127,9 @@ const verifyOTP = async (req, res) => {
       // Delete expired OTP documents
       const result = await Otp.deleteOne({ otp: otpRecord.otp});
 
-      return res.render('verify-otp', {  errorMessage: 'OTP has expired. Please generate a new OTP.' });
+      // return res.render('verify-otp', {  errorMessage: 'OTP has expired. Please generate a new OTP.',email });
+      message= 'OTP has expired. Please generate a new OTP'
+      return res.render('userSweetAlert.ejs', { message }); 
     }
   
     // Verify the entered OTP against the hashed OTP in the record
@@ -138,9 +143,11 @@ const verifyOTP = async (req, res) => {
       res.redirect('/login');
       
     } else {
-      console.log("haii6")
+      message= 'Incorrect OTP. Please try again'
+      return res.render('userSweetAlert.ejs', { message }); 
+   
       // Incorrect OTP, render the verify-otp page with an error message
-      return res.render('verify-otp', { errorMessage: 'Incorrect OTP. Please try again.' });
+      // return res.render('verify-otp', { errorMessage: 'Incorrect OTP. Please try again.',email });
     }
   } catch (error) {
     console.error(error.message);
