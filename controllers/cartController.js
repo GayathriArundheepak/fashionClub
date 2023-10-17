@@ -200,6 +200,7 @@ const incrementQuantity = async (req, res) => {
   try {
     const { itemId } = req.params;
     const userId = req.session.user_id; // Assuming userId is stored in the session after authentication
+    const IdOfProduct =  cartItem.productId._id
     const product = await Product.findById(IdOfProduct )
    
     
@@ -227,7 +228,6 @@ const incrementQuantity = async (req, res) => {
     
     const cartItem = userCart.items.find((item) => item._id.toString() === itemId);
     
-   const IdOfProduct =  cartItem.productId._id
     if (cartItem) {
      
       if (product.stocks <=  cartItem.quantity ) {
