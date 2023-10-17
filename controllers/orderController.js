@@ -95,7 +95,9 @@ const editOrderStatus = async (req, res) => {
 const orderCancel = async (req, res) => {
   try {
     const { orderId } = req.body; // Get the order ID from the request
-  
+  if(!orderId ){
+    res.redirect("/orders")
+  }
     const order = await Order.findById(orderId);
 
     res.render("cancel-order-confirmation",{  orderId,order  });
@@ -164,14 +166,14 @@ if (allCancelled) {
 if(paymentType!=="COD"){
 
     // Query the user's wallet
-    let userWallet = await Wallet.findOne({ userId });
+    var userWallet = await Wallet.findOne({ userId });
 
     // If the user doesn't have a wallet, create one
     if (!userWallet) {
       userWallet = new Wallet({ userId });
       await userWallet.save();
     }
-
+    var userWallet = await Wallet.findOne({ userId });
     // Deduct the amount from the user's wallet balance
     userWallet.balance += amountToSubtract;
 
@@ -191,14 +193,14 @@ if(paymentType!=="COD"){
       if (!updatedProduct) {
         
     const message = `Item cancelled successfully. Updated wallet balance: ${userWallet.balance}`;
-    return res.render('userSweetAlert.ejs', { message });
+    return res.render('cancelSweetAlert', { message });
       }
 
     const message = `Item cancelled successfully. Updated wallet balance: ${userWallet.balance}`;
-    return res.render('userSweetAlert.ejs', { message });
+    return res.render('cancelSweetAlert', { message });
     }else{
       const message = 'Item cancelled successfully. ';
-      return res.render('userSweetAlert.ejs', { message });
+      return res.render('cancelSweetAlert', { message });
     }   
   } catch (error) {
     console.error(error);

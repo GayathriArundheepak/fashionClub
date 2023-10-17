@@ -132,6 +132,41 @@
                                   
                             <%  }%>
                             <% }) %>
+                            <% if (!addresses.length) { %>
+
+                              <form action="/profile/addresses/add" method="POST">
+                                <h1 style="color:#009688;"> Add Address</h1>
+                                <div class="form-group">
+                                    <label for="houseNO">HouseNO/Name:</label>
+                                    <input type="text" class="form-control" id="houseNO" name="houseNO" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <input type="text" class="form-control" id="country" name="country" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State:</label>
+                                    <input type="text" class="form-control" id="state" name="state" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="district">District:</label>
+                                    <input type="text" class="form-control" id="district" name="district" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cityOrVillage">City or Village:</label>
+                                    <input type="text" class="form-control" id="cityOrVillage" name="cityOrVillage" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="street">Street:</label>
+                                    <input type="text" class="form-control" id="street" name="street" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pin">Pin:</label>
+                                    <input type="text" class="form-control" id="pin" name="pin" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save and use Address</button>
+                            </form>
+                            <% } %>
                         </div>
                             </div>
                         </div>

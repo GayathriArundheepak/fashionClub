@@ -26,7 +26,7 @@ const generateInvoice = async (req, res) => {
     if (!userId) {
 
       const message = 'User not authenticated.';
-      return res.render('userSweetAlert.ejs', { message });
+      return res.render('paymentSweetAlert.ejs', { message });
    
     }
 
@@ -36,7 +36,7 @@ const generateInvoice = async (req, res) => {
 
     if (!order) {
       const message= 'Order not found' 
-      return  res.render('userSweetAlert.ejs', { message });
+      return  res.render('paymentSweetAlert.ejs', { message });
     }
 
     // Render the HTML template with the order data
@@ -67,7 +67,7 @@ const generateInvoice = async (req, res) => {
 
 
 function renderInvoiceTemplate(order) {
-  const imagePath = '/images/logoFashionClub.png';
+  // const imagePath = '/images/logoFashionClub.png';
 
   // Define your HTML template as a string
   const template = `
@@ -170,6 +170,7 @@ function renderInvoiceTemplate(order) {
       </head>
       <body>
       <div class="invoice-box">
+      <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">Fashion</span>Club</h1>
       <h1>Invoice</h1>
       <table cellpadding="0" cellspacing="0">
       <tr class="top">
@@ -200,7 +201,7 @@ function renderInvoiceTemplate(order) {
                       ${order.address[0].district || ''}, ${order.address[0].state || ''} ${order.address[0].pin || ''}
                     </td>
                     <td>
-                      ${order.userId || ''}<br />
+                    paymentId
                       ${order.paymentId ? order.paymentId._id || '' : ''}
                     </td>
                   </tr>

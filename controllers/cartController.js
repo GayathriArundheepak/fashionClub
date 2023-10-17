@@ -200,6 +200,7 @@ const incrementQuantity = async (req, res) => {
   try {
     const { itemId } = req.params;
     const userId = req.session.user_id; // Assuming userId is stored in the session after authentication
+    const product = await Product.findById(IdOfProduct )
    
     
     if (!userId) {
@@ -227,7 +228,6 @@ const incrementQuantity = async (req, res) => {
     const cartItem = userCart.items.find((item) => item._id.toString() === itemId);
     
    const IdOfProduct =  cartItem.productId._id
-              const product = await Product.findById(IdOfProduct )
     if (cartItem) {
      
       if (product.stocks <=  cartItem.quantity ) {
@@ -327,7 +327,7 @@ const  checkoutPage =async (req, res) => {
       const coupons= await Coupon.find();
 
       const addresses = await Address.find({ userId },{userAddress:1});
-  
+ 
       const userData = await User.findOne({ _id: req.session.user_id }, { username: 1 });
     
       const categories  =await Category.find()
@@ -365,7 +365,7 @@ const  checkoutPage =async (req, res) => {
     categories, 
     username:userData.username,
     coupons,
-  couponCode,
+    couponCode,
     maxAmount,
     discountAmount,
   wishlist,MYRAZORPAY_API_KEY });
@@ -418,7 +418,11 @@ const checkoutSubmission = async (req, res) => {
 
     // Use the filter method to select addresses with selected:true
 const selectedAddresses = address.userAddress.filter(address => address.selected === true);
-
+if (selectedAddresses=== 0) {
+  const message ='No addresse selected ';
+  return res.render('userSweetAlert.ejs', { message });
+ 
+}
 
 if (!products || !products.items) {
 
@@ -460,8 +464,17 @@ if (!products || !products.items) {
   const selectedAddress = selectedAddresses[0];
 
 
-  // Now you can access the individual fields of the selected address
-  const { country, state, district, cityOrVillage, street, pin, houseNO } = selectedAddress;
+  // // Now you can access the individual fields of the selected address
+  // const { country, state, district, cityOrVillage, street, pin, houseNO } = selectedAddress;
+  if (selectedAddress) {
+    const { country, state, district, cityOrVillage, street, pin, houseNO } = selectedAddress;
+
+  } else {
+    
+  
+    const message = "Please select an address before proceeding.";
+    return res.render('userSweetAlert.ejs', { message });
+  }
   
 
     // Create a new order based on the user's session data
@@ -475,7 +488,7 @@ if (!products || !products.items) {
     // Save the new payment to the database
     try {
       await newPayment.save();
-  e
+  
     } catch (error) {
       console.error('Error creating payment record:', error);
       return  res.status(500).render('error', { error, status: 500 });

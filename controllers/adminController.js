@@ -194,6 +194,13 @@ const searchUser = async (req, res) => {
 const searchProducts = async (req, res) => {
      try {
         const  adminId =req.session.admin_id
+        const page = parseInt(req.query.page) || 1; // Get the requested page number
+        const perPage = 5; // Number of items to display per page
+  const products = await Product.find()
+                                .skip((page - 1) * perPage)
+                                .limit(perPage);
+  const totalItems = await User.countDocuments();
+  const totalPages = Math.ceil(totalItems / perPage);
         if (!adminId) {
             const message = "admin not authenticated.";
            return  res.render('adminSweetAlert.ejs', { message });
@@ -211,7 +218,8 @@ const searchProducts = async (req, res) => {
     
  
 
-        res.render("product-list",{products: searchResults}); // Pass the search results to the template
+        res.render("product-list",{products: searchResults, page,
+            totalPages, }); // Pass the search results to the template
     } catch (error) {
         console.error(error);
         return  res.status(500).render('error', { error, status: 500 });

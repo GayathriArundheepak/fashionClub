@@ -365,6 +365,10 @@ const userSearchProducts = async (req, res) => {
     try {
         
        const { query } = req.query;
+       const cartData = await Cart.findOne({ userId: req.session.user_id }).populate({
+        path: 'items.productId',
+        model: 'Product', // Reference to your product model
+      });
  
    const categories  =await Category.find()
    const wishlist  =await Wishlist.findOne({userId:req.session.user_id })
@@ -378,7 +382,7 @@ const userSearchProducts = async (req, res) => {
        });
 
 
-    res.render("productSearch",{products:searchResults,username: userData.username,userData,categories,wishlist   })
+    res.render("productSearch",{products:searchResults,username: userData.username,userData,categories,wishlist,cartData   })
 
      
    } catch (error) {
