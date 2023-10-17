@@ -200,9 +200,6 @@ const incrementQuantity = async (req, res) => {
   try {
     const { itemId } = req.params;
     const userId = req.session.user_id; // Assuming userId is stored in the session after authentication
-    const IdOfProduct =  cartItem.productId._id
-    const product = await Product.findById(IdOfProduct )
-   
     
     if (!userId) {
       const message = "User not authenticated.";
@@ -217,17 +214,17 @@ const incrementQuantity = async (req, res) => {
     if (!userCart) {
       const message = 'Cart not found.';
       return res.render('userSweetAlert.ejs', { message });
-    
+      
     }
-    if (product.stocks===0) {
-      const message = 'OUT OFF STOCK';
-      return res.render('userSweetAlert.ejs', { message });
-      }
-
+    
+    
     // Find the cart item by productId and increment the quantity
     
     const cartItem = userCart.items.find((item) => item._id.toString() === itemId);
     
+    const IdOfProduct =  cartItem.productId._id
+    const product = await Product.findById(IdOfProduct )
+   
     if (cartItem) {
      
       if (product.stocks <=  cartItem.quantity ) {
