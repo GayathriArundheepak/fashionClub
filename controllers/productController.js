@@ -365,14 +365,7 @@ const userSearchProducts = async (req, res) => {
     try {
         
        const { query } = req.query;
-       const cartData = await Cart.findOne({ userId: req.session.user_id }).populate({
-        path: 'items.productId',
-        model: 'Product', // Reference to your product model
-      });
- 
-   const categories  =await Category.find()
-   const wishlist  =await Wishlist.findOne({userId:req.session.user_id })
-   const userData = await User.findOne({ _id: req.session.user_id }, { username: 1 });
+       
        const searchResults = await Product.find({
            $or: [
                {  title:  { $regex: new RegExp(query, 'i') }  },
@@ -380,10 +373,21 @@ const userSearchProducts = async (req, res) => {
              
            ],
        });
+       const categories  =await Category.find()
+       if(req.session.user_id ){
+       const cartData = await Cart.findOne({ userId: req.session.user_id }).populate({
+        path: 'items.productId',
+        model: 'Product', // Reference to your product model
+      });
+    
+   const wishlist  =await Wishlist.findOne({userId:req.session.user_id })
+   const userData = await User.findOne({ _id: req.session.user_id }, { username: 1 });
 
 
     res.render("productSearch",{products:searchResults,username: userData.username,userData,categories,wishlist,cartData   })
-
+    }else{
+        res.render("productSearch",{products:searchResults,username:null,categories,wishlist:null,cartData:null   })
+    }
      
    } catch (error) {
        console.error(error);
